@@ -30,16 +30,16 @@
 <div class="
   fixed 
   inset-0 
-  bg-gradient-to-br 
-  from-zinc-900 
-  to-zinc-800
+  bg-[#472f1f]
   before:fixed
   before:inset-0
-  before:bg-[repeating-conic-gradient(from_45deg,#ffffff02_0deg_90deg,#00000002_90deg_180deg)]
-  before:bg-[size:60px_60px]
+  before:bg-[url('/floor/checkered-pattern.png')]
+  before:bg-repeat
+  before:bg-[size:300px_300px]
+  before:opacity-90
   after:fixed
   after:inset-0
-  after:bg-[linear-gradient(rgba(0,0,0,0.7),transparent_8%,transparent_92%,rgba(0,0,0,0.7))]
+  after:bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]
 ">
   <main class="
     fixed 
@@ -56,48 +56,50 @@
       class="
         relative
         w-[65vh]
-        h-[45vh]
+        h-[55vh]
         max-w-[75vw]
-        max-h-[55vh]
-        rounded-[60px]
+        max-h-[65vh]
+        rounded-[30px]
         shadow-2xl
         overflow-hidden
 
         sm:w-[70vh]
-        sm:h-[50vh]
+        sm:h-[60vh]
         sm:max-w-[70vw]
-        sm:max-h-[60vh]
+        sm:max-h-[70vh]
         
         md:w-[700px]
-        md:h-[500px]
+        md:h-[600px]
         md:max-w-[80vw]
       "
     >
       <!-- Outer rim -->
-      <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 to-zinc-900 rounded-[60px]"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 to-zinc-900 rounded-[30px]"></div>
       
       <!-- Inner wooden rim -->
-      <div class="absolute inset-[8px] bg-gradient-to-b from-zinc-900 to-zinc-800 rounded-[55px]"></div>
+      <div class="absolute inset-[8px] bg-gradient-to-b from-zinc-900 to-zinc-800 rounded-[25px]"></div>
       
       <!-- Padding rim -->
-      <div class="absolute inset-[16px] bg-green-800 rounded-[50px] shadow-inner"></div>
+      <div class="absolute inset-[16px] bg-green-800 rounded-[20px] shadow-inner"></div>
 
-      <!-- Felt surface with complex woven pattern -->
+      <!-- Felt surface with cloth texture -->
       <div class="
         absolute 
         inset-[24px] 
         bg-green-700 
-        rounded-[45px]
+        rounded-[15px]
         shadow-inner
         before:absolute
         before:inset-0
-        before:rounded-[45px]
-        before:bg-[size:40px_40px]
-        before:bg-[image:conic-gradient(transparent,transparent_27deg,#00550027_27deg,#00550027_65deg,transparent_65deg,transparent_119deg,#00550027_119deg,#00550027_155deg,transparent_155deg,transparent_209deg,#00550027_209deg,#00550027_245deg,transparent_245deg,transparent_299deg,#00550027_299deg,#00550027_335deg,transparent_335deg,transparent),radial-gradient(circle_at_10px_10px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_30px_10px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_10px_30px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_30px_30px,#00550027,#00550027_10px,transparent_10px,transparent)]
+        before:rounded-[15px]
+        before:bg-[url('/table/arabesque.png')]
+        before:bg-repeat
+        before:bg-[size:200px_200px]
+        before:opacity-40
         after:absolute
         after:inset-0
         after:bg-[radial-gradient(circle_at_center_center,transparent,transparent_40%,#00440055_110%)]
-        after:rounded-[45px]
+        after:rounded-[15px]
         after:pointer-events-none
       ">
         <!-- Seats: place them absolutely around the table. -->
