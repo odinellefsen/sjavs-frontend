@@ -14,9 +14,10 @@
 <svelte:head>
   <style>
     html, body {
+      padding: 0;
+      margin: 0;
       overflow: hidden;
       height: 100%;
-      position: fixed;
       width: 100%;
     }
   </style>
@@ -30,77 +31,47 @@
 <div class="
   fixed 
   inset-0 
-  bg-[#472f1f]
+  bg-[#5c3a1e]
   before:fixed
   before:inset-0
-  before:bg-[url('/floor/checkered-pattern.png')]
+  before:bg-[url('/table-edge/retina-wood.png')]
   before:bg-repeat
   before:bg-[size:300px_300px]
   before:opacity-90
-  after:fixed
-  after:inset-0
-  after:bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]
 ">
-  <main class="
-    fixed 
-    inset-0 
-    flex 
-    items-center 
-    justify-center 
-    -translate-y-[5vh]
-  ">
+  <main class="fixed inset-0 flex items-center justify-center p-0 m-0">
     <!-- A responsive poker table container. 
          On the smallest screens, it's sized for mobile and 
          expands on larger breakpoints. -->
     <section
       class="
         relative
-        w-[65vh]
-        h-[55vh]
-        max-w-[75vw]
-        max-h-[65vh]
-        rounded-[30px]
-        shadow-2xl
+        w-[100vw]
+        h-[100vh]
         overflow-hidden
-
-        sm:w-[70vh]
-        sm:h-[60vh]
-        sm:max-w-[70vw]
-        sm:max-h-[70vh]
-        
-        md:w-[700px]
-        md:h-[600px]
-        md:max-w-[80vw]
       "
     >
-      <!-- Outer rim -->
-      <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 to-zinc-900 rounded-[30px]"></div>
-      
-      <!-- Inner wooden rim -->
-      <div class="absolute inset-[8px] bg-gradient-to-b from-zinc-900 to-zinc-800 rounded-[25px]"></div>
-      
-      <!-- Padding rim -->
-      <div class="absolute inset-[16px] bg-green-800 rounded-[20px] shadow-inner"></div>
-
-      <!-- Felt surface with cloth texture -->
+      <!-- Just the felt surface -->
       <div class="
         absolute 
-        inset-[24px] 
+        inset-[24px]
         bg-green-700 
-        rounded-[15px]
-        shadow-inner
+        rounded-[30px]
+        box-shadow-[0_0_200px_80px_rgba(0,0,0,0.95),0_0_400px_160px_rgba(0,0,0,0.8)]
         before:absolute
-        before:inset-0
-        before:rounded-[15px]
-        before:bg-[url('/table/arabesque.png')]
+        before:inset-[-8px]
+        before:rounded-[38px]
+        before:bg-[url('/table/45-degree-fabric-light.png')]
         before:bg-repeat
-        before:bg-[size:200px_200px]
+        before:bg-[size:500px_500px]
         before:opacity-40
+        before:shadow-[inset_0_0_20px_12px_rgba(0,0,0,0.8)]
         after:absolute
         after:inset-0
         after:bg-[radial-gradient(circle_at_center_center,transparent,transparent_40%,#00440055_110%)]
-        after:rounded-[15px]
+        after:rounded-[30px]
         after:pointer-events-none
+        z-[-1]
       ">
         <!-- Seats: place them absolutely around the table. -->
         {#each seats as seat}
@@ -178,6 +149,6 @@
     </section>
 
     <!-- Add this after the main table section -->
-    <CardHand />
+    <!-- <CardHand /> -->
   </main>
 </div>
