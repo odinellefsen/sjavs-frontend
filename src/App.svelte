@@ -38,8 +38,8 @@
   to-zinc-800
   before:absolute
   before:inset-0
-  before:bg-[repeating-linear-gradient(45deg,transparent,transparent_60px,#ffffff05_60px,#ffffff05_120px)]
-  before:bg-[size:120px_120px]
+  before:bg-[repeating-conic-gradient(from_45deg,#ffffff02_0deg_90deg,#00000002_90deg_180deg)]
+  before:bg-[size:60px_60px]
   after:absolute
   after:inset-0
   after:bg-[linear-gradient(rgba(0,0,0,0.7),transparent_8%,transparent_92%,rgba(0,0,0,0.7))]
@@ -77,25 +77,23 @@
     <!-- Padding rim -->
     <div class="absolute inset-[16px] bg-green-800 rounded-[50px] shadow-inner"></div>
 
-    <!-- Felt surface with organic pool table texture -->
+    <!-- Felt surface with complex woven pattern -->
     <div class="
       absolute 
       inset-[24px] 
       bg-green-700 
       rounded-[45px]
       shadow-inner
-      bg-opacity-90
-      backdrop-blur-sm
       before:absolute
       before:inset-0
-      before:bg-[radial-gradient(#ffffff05_1px,transparent_2px)]
-      before:bg-[size:8px_8px]
       before:rounded-[45px]
+      before:bg-[size:40px_40px]
+      before:bg-[image:conic-gradient(transparent,transparent_27deg,#00550027_27deg,#00550027_65deg,transparent_65deg,transparent_119deg,#00550027_119deg,#00550027_155deg,transparent_155deg,transparent_209deg,#00550027_209deg,#00550027_245deg,transparent_245deg,transparent_299deg,#00550027_299deg,#00550027_335deg,transparent_335deg,transparent),radial-gradient(circle_at_10px_10px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_30px_10px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_10px_30px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_30px_30px,#00550027,#00550027_10px,transparent_10px,transparent)]
       after:absolute
       after:inset-0
-      after:bg-[linear-gradient(rgba(255,255,255,0.1),transparent_30%,transparent_70%,rgba(255,255,255,0.1))]
+      after:bg-[radial-gradient(circle_at_center_center,transparent,transparent_40%,#00440055_110%)]
       after:rounded-[45px]
-      [background-image:repeating-linear-gradient(90deg,transparent,transparent_4px,rgba(0,0,0,0.05)_4px,rgba(0,0,0,0.05)_8px),repeating-linear-gradient(45deg,transparent,transparent_8px,rgba(0,0,0,0.03)_8px,rgba(0,0,0,0.03)_16px)]
+      after:pointer-events-none
     ">
       <!-- Seats: place them absolutely around the table. -->
       {#each seats as seat}
@@ -176,4 +174,7 @@
       </div>
     </div>
   </section>
+
+  <!-- Add this after the main table section -->
+  <CardHand />
 </main>
