@@ -83,7 +83,7 @@
       shadow-inner
     "></div>
 
-    <!-- Felt surface with subtle pattern -->
+    <!-- Felt surface with rich texture -->
     <div class="
       absolute 
       inset-[24px] 
@@ -97,6 +97,11 @@
       before:bg-[radial-gradient(#00000003_1px,transparent_1px)]
       before:bg-[size:4px_4px]
       before:rounded-[9999px]
+      after:absolute
+      after:inset-0
+      after:bg-[linear-gradient(rgba(255,255,255,0.05),transparent_20%,transparent_80%,rgba(255,255,255,0.05))]
+      after:rounded-[9999px]
+      [background-image:repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(0,0,0,0.1)_2px,rgba(0,0,0,0.1)_4px)]
     ">
       <!-- Seats: place them absolutely around the table. -->
       {#each seats as seat}
