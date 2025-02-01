@@ -27,154 +27,155 @@
   On small screens, the table is narrower, 
   and it scales up for larger screens.
 -->
-<main class="
+<div class="
   fixed 
   inset-0 
-  flex 
-  items-center 
-  justify-center 
   bg-gradient-to-br 
   from-zinc-900 
   to-zinc-800
-  before:absolute
+  before:fixed
   before:inset-0
   before:bg-[repeating-conic-gradient(from_45deg,#ffffff02_0deg_90deg,#00000002_90deg_180deg)]
   before:bg-[size:60px_60px]
-  after:absolute
+  after:fixed
   after:inset-0
   after:bg-[linear-gradient(rgba(0,0,0,0.7),transparent_8%,transparent_92%,rgba(0,0,0,0.7))]
 ">
-  <!-- A responsive poker table container. 
-       On the smallest screens, it's sized for mobile and 
-       expands on larger breakpoints. -->
-  <section
-    class="
-      relative
-      w-[45vh]
-      h-[65vh]
-      max-w-[80vw]
-      max-h-[80vh]
-      rounded-[60px]
-      shadow-2xl
-      overflow-hidden
+  <main class="
+    fixed 
+    inset-0 
+    flex 
+    items-center 
+    justify-center 
+    -translate-y-[5vh]
+  ">
+    <!-- A responsive poker table container. 
+         On the smallest screens, it's sized for mobile and 
+         expands on larger breakpoints. -->
+    <section
+      class="
+        relative
+        w-[65vh]
+        h-[45vh]
+        max-w-[75vw]
+        max-h-[55vh]
+        rounded-[60px]
+        shadow-2xl
+        overflow-hidden
 
-      sm:w-[40vh]
-      sm:h-[55vh]
-      sm:max-w-[70vw]
-      sm:max-h-[70vh]
+        sm:w-[70vh]
+        sm:h-[50vh]
+        sm:max-w-[70vw]
+        sm:max-h-[60vh]
+        
+        md:w-[700px]
+        md:h-[500px]
+        md:max-w-[80vw]
+      "
+    >
+      <!-- Outer rim -->
+      <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 to-zinc-900 rounded-[60px]"></div>
       
-      md:w-[350px]
-      md:h-[500px]
-      md:max-w-[80vw]
-    "
-  >
-    <!-- Outer rim -->
-    <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 to-zinc-900 rounded-[60px]"></div>
-    
-    <!-- Inner wooden rim -->
-    <div class="absolute inset-[8px] bg-gradient-to-b from-zinc-900 to-zinc-800 rounded-[55px]"></div>
-    
-    <!-- Padding rim -->
-    <div class="absolute inset-[16px] bg-green-800 rounded-[50px] shadow-inner"></div>
+      <!-- Inner wooden rim -->
+      <div class="absolute inset-[8px] bg-gradient-to-b from-zinc-900 to-zinc-800 rounded-[55px]"></div>
+      
+      <!-- Padding rim -->
+      <div class="absolute inset-[16px] bg-green-800 rounded-[50px] shadow-inner"></div>
 
-    <!-- Felt surface with complex woven pattern -->
-    <div class="
-      absolute 
-      inset-[24px] 
-      bg-green-700 
-      rounded-[45px]
-      shadow-inner
-      before:absolute
-      before:inset-0
-      before:rounded-[45px]
-      before:bg-[size:40px_40px]
-      before:bg-[image:conic-gradient(transparent,transparent_27deg,#00550027_27deg,#00550027_65deg,transparent_65deg,transparent_119deg,#00550027_119deg,#00550027_155deg,transparent_155deg,transparent_209deg,#00550027_209deg,#00550027_245deg,transparent_245deg,transparent_299deg,#00550027_299deg,#00550027_335deg,transparent_335deg,transparent),radial-gradient(circle_at_10px_10px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_30px_10px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_10px_30px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_30px_30px,#00550027,#00550027_10px,transparent_10px,transparent)]
-      after:absolute
-      after:inset-0
-      after:bg-[radial-gradient(circle_at_center_center,transparent,transparent_40%,#00440055_110%)]
-      after:rounded-[45px]
-      after:pointer-events-none
-    ">
-      <!-- Seats: place them absolutely around the table. -->
-      {#each seats as seat}
-        <!-- You can use position classes or inline styles to place seats. -->
-        {#if seat.position === 'top-center'}
-          <div class="absolute top-4 left-1/2 -translate-x-1/2">
-            <div
-              class="
-                text-white
-                bg-black/40
-                py-2
-                px-4
-                rounded-md
-                text-center
-                shadow-lg
-              "
-            >
-              {seat.name}
+      <!-- Felt surface with complex woven pattern -->
+      <div class="
+        absolute 
+        inset-[24px] 
+        bg-green-700 
+        rounded-[45px]
+        shadow-inner
+        before:absolute
+        before:inset-0
+        before:rounded-[45px]
+        before:bg-[size:40px_40px]
+        before:bg-[image:conic-gradient(transparent,transparent_27deg,#00550027_27deg,#00550027_65deg,transparent_65deg,transparent_119deg,#00550027_119deg,#00550027_155deg,transparent_155deg,transparent_209deg,#00550027_209deg,#00550027_245deg,transparent_245deg,transparent_299deg,#00550027_299deg,#00550027_335deg,transparent_335deg,transparent),radial-gradient(circle_at_10px_10px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_30px_10px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_10px_30px,#00550027,#00550027_10px,transparent_10px,transparent),radial-gradient(circle_at_30px_30px,#00550027,#00550027_10px,transparent_10px,transparent)]
+        after:absolute
+        after:inset-0
+        after:bg-[radial-gradient(circle_at_center_center,transparent,transparent_40%,#00440055_110%)]
+        after:rounded-[45px]
+        after:pointer-events-none
+      ">
+        <!-- Seats: place them absolutely around the table. -->
+        {#each seats as seat}
+          <!-- You can use position classes or inline styles to place seats. -->
+          {#if seat.position === 'top-center'}
+            <div class="absolute top-4 left-1/2 -translate-x-1/2">
+              <div
+                class="
+                  text-white
+                  bg-black/40
+                  py-2
+                  px-4
+                  rounded-md
+                  text-center
+                  shadow-lg
+                "
+              >
+                {seat.name}
+              </div>
             </div>
-          </div>
-        {/if}
-        {#if seat.position === 'bottom-center'}
-          <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
-            <div
-              class="
-                text-white
-                bg-black/40
-                py-2
-                px-4
-                rounded-md
-                text-center
-                shadow-lg
-              "
-            >
-              {seat.name}
+          {/if}
+          {#if seat.position === 'bottom-center'}
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
+              <div
+                class="
+                  text-white
+                  bg-black/40
+                  py-2
+                  px-4
+                  rounded-md
+                  text-center
+                  shadow-lg
+                "
+              >
+                {seat.name}
+              </div>
             </div>
-          </div>
-        {/if}
-        {#if seat.position === 'left-center'}
-          <div class="absolute left-4 top-1/2 -translate-y-1/2">
-            <div
-              class="
-                text-white
-                bg-black/40
-                py-2
-                px-4
-                rounded-md
-                text-center
-                shadow-lg
-              "
-            >
-              {seat.name}
+          {/if}
+          {#if seat.position === 'left-center'}
+            <div class="absolute left-4 top-1/2 -translate-y-1/2">
+              <div
+                class="
+                  text-white
+                  bg-black/40
+                  py-2
+                  px-4
+                  rounded-md
+                  text-center
+                  shadow-lg
+                "
+              >
+                {seat.name}
+              </div>
             </div>
-          </div>
-        {/if}
-        {#if seat.position === 'right-center'}
-          <div class="absolute right-4 top-1/2 -translate-y-1/2">
-            <div
-              class="
-                text-white
-                bg-black/40
-                py-2
-                px-4
-                rounded-md
-                text-center
-                shadow-lg
-              "
-            >
-              {seat.name}
+          {/if}
+          {#if seat.position === 'right-center'}
+            <div class="absolute right-4 top-1/2 -translate-y-1/2">
+              <div
+                class="
+                  text-white
+                  bg-black/40
+                  py-2
+                  px-4
+                  rounded-md
+                  text-center
+                  shadow-lg
+                "
+              >
+                {seat.name}
+              </div>
             </div>
-          </div>
-        {/if}
-      {/each}
-
-      <!-- Center area for community cards, pot, or any other content. -->
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <CardHand />
+          {/if}
+        {/each}
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Add this after the main table section -->
-  <CardHand />
-</main>
+    <!-- Add this after the main table section -->
+    <CardHand />
+  </main>
+</div>
