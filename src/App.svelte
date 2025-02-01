@@ -34,12 +34,12 @@
   items-center 
   justify-center 
   bg-gradient-to-br 
-  from-gray-900 
-  to-gray-800
+  from-zinc-900 
+  to-zinc-800
   before:absolute
   before:inset-0
-  before:bg-[radial-gradient(#ffffff08_1px,transparent_1px)]
-  before:bg-[size:20px_20px]
+  before:bg-[repeating-linear-gradient(45deg,transparent,transparent_60px,#ffffff05_60px,#ffffff05_120px)]
+  before:bg-[size:120px_120px]
   after:absolute
   after:inset-0
   after:bg-[linear-gradient(rgba(0,0,0,0.7),transparent_8%,transparent_92%,rgba(0,0,0,0.7))]
@@ -54,7 +54,7 @@
       h-[65vh]
       max-w-[80vw]
       max-h-[80vh]
-      rounded-[9999px]
+      rounded-[60px]
       shadow-2xl
       overflow-hidden
 
@@ -69,39 +69,33 @@
     "
   >
     <!-- Outer rim -->
-    <div class="absolute inset-0 bg-gradient-to-b from-amber-900 to-amber-800 rounded-[9999px]"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 to-zinc-900 rounded-[60px]"></div>
     
     <!-- Inner wooden rim -->
-    <div class="absolute inset-[8px] bg-gradient-to-b from-amber-800 to-amber-700 rounded-[9999px]"></div>
+    <div class="absolute inset-[8px] bg-gradient-to-b from-zinc-900 to-zinc-800 rounded-[55px]"></div>
     
     <!-- Padding rim -->
-    <div class="
-      absolute 
-      inset-[16px] 
-      bg-green-800 
-      rounded-[9999px]
-      shadow-inner
-    "></div>
+    <div class="absolute inset-[16px] bg-green-800 rounded-[50px] shadow-inner"></div>
 
-    <!-- Felt surface with rich texture -->
+    <!-- Felt surface with organic pool table texture -->
     <div class="
       absolute 
       inset-[24px] 
       bg-green-700 
-      rounded-[9999px]
+      rounded-[45px]
       shadow-inner
       bg-opacity-90
       backdrop-blur-sm
       before:absolute
       before:inset-0
-      before:bg-[radial-gradient(#00000003_1px,transparent_1px)]
-      before:bg-[size:4px_4px]
-      before:rounded-[9999px]
+      before:bg-[radial-gradient(#ffffff05_1px,transparent_2px)]
+      before:bg-[size:8px_8px]
+      before:rounded-[45px]
       after:absolute
       after:inset-0
-      after:bg-[linear-gradient(rgba(255,255,255,0.05),transparent_20%,transparent_80%,rgba(255,255,255,0.05))]
-      after:rounded-[9999px]
-      [background-image:repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(0,0,0,0.1)_2px,rgba(0,0,0,0.1)_4px)]
+      after:bg-[linear-gradient(rgba(255,255,255,0.1),transparent_30%,transparent_70%,rgba(255,255,255,0.1))]
+      after:rounded-[45px]
+      [background-image:repeating-linear-gradient(90deg,transparent,transparent_4px,rgba(0,0,0,0.05)_4px,rgba(0,0,0,0.05)_8px),repeating-linear-gradient(45deg,transparent,transparent_8px,rgba(0,0,0,0.03)_8px,rgba(0,0,0,0.03)_16px)]
     ">
       <!-- Seats: place them absolutely around the table. -->
       {#each seats as seat}
