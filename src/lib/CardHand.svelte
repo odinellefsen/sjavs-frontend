@@ -1,10 +1,10 @@
 <script lang="ts">
   const cards = [
-    { id: 'clubs_02', alt: 'Two of Clubs' },
-    { id: 'diamonds_02', alt: 'Two of Diamonds' },
-    { id: 'hearts_02', alt: 'Two of Hearts' },
-    { id: 'spades_02', alt: 'Two of Spades' },
-    { id: 'clubs_03', alt: 'Three of Clubs' },
+    { id: 'clubs_07', alt: 'Two of Clubs' },
+    { id: 'diamonds_08', alt: 'Two of Diamonds' },
+    { id: 'hearts_07', alt: 'Two of Hearts' },
+    { id: 'spades_09', alt: 'Two of Spades' },
+    { id: 'clubs_08', alt: 'Three of Clubs' },
     { id: 'spades_queen', alt: 'Queen of Spades' },
     { id: 'hearts_ace', alt: 'Ace of Hearts' }
   ];
