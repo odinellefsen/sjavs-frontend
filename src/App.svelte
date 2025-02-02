@@ -93,7 +93,7 @@
               </div>
             </div>
           {/if}
-          {#if seat.position === 'bottom-center'}
+          <!-- <!-- {#if seat.position === 'bottom-center'}
             <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
               <div
                 class="
@@ -108,8 +108,8 @@
               >
                 {seat.name}
               </div>
-            </div>
-          {/if}
+            </div> -->
+          <!-- {/if} -->
           {#if seat.position === 'left-center'}
             <div class="absolute left-4 top-1/2 -translate-y-1/2">
               <div
@@ -149,6 +149,6 @@
     </section>
 
     <!-- Add this after the main table section -->
-    <!-- <CardHand /> -->
+    <CardHand />
   </main>
 </div>
