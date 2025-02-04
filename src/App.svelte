@@ -1,5 +1,8 @@
 <script lang="ts">
   import CardHand from './lib/CardHand.svelte'
+  import { wsStore, type WSMessage } from './lib/stores/websocket';
+  import { onMount, onDestroy } from 'svelte';
+  import { initClerk, user, clerk } from './lib/stores/clerk';
 
   // Example seat data, if you'd like to map over seats.
   // For illustrative purposes:
@@ -9,6 +12,38 @@
     { name: 'Player 3', position: 'right-center' },
     { name: 'Player 4', position: 'bottom-center' }
   ]
+
+  // Subscribe to WebSocket store
+  let connected = false;
+  let messages: WSMessage[] = [];
+
+  const unsubscribe = wsStore.subscribe(state => {
+    connected = state.connected;
+    messages = state.messages;
+  });
+
+  onMount(async () => {
+    await initClerk();
+    wsStore.connect();
+
+    // Wait a bit before sending the join message
+    setTimeout(() => {
+        if (connected) {
+            wsStore.sendMessage("join");
+        }
+    }, 500); // Small delay to ensure the WebSocket is ready
+  });
+
+  onDestroy(() => {
+    // Clean up subscription and connection
+    unsubscribe();
+    wsStore.disconnect();
+  });
+
+  // Example function to send a message
+  function sendTestMessage() {
+    wsStore.sendMessage('test', { message: 'Hello from client!' });
+  }
 </script>
 
 <svelte:head>
@@ -149,6 +184,46 @@
     </section>
 
     <!-- Add this after the main table section -->
-    <CardHand />
+    <!-- <CardHand /> -->
+    <div class="absolute bottom-4 right-4 bg-black/50 p-4 text-white rounded-lg max-w-md">
+      <h3 class="text-lg font-bold">Messages:</h3>
+      {#each messages as message}
+        <p>{message.event}: {JSON.stringify(message.data)}</p>
+      {/each}
+    </div>
   </main>
 </div>
+
+<!-- Add a status indicator and test button -->
+<div class="fixed top-4 right-4 z-10 flex gap-2">
+  <div class={`px-3 py-1 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'} text-white`}>
+    {connected ? 'Connected' : 'Disconnected'}
+  </div>
+  <button 
+    class="px-3 py-1 bg-blue-500 text-white rounded-full"
+    on:click={sendTestMessage}
+  >
+    Send Test Message
+  </button>
+</div>
+
+<!-- Add sign-in/sign-out buttons based on auth state -->
+{#if $user}
+  <div class="fixed top-4 left-4 z-10">
+    <button 
+      class="px-3 py-1 bg-red-500 text-white rounded-full"
+      on:click={() => $user?.signOut()}
+    >
+      Sign Out
+    </button>
+  </div>
+{:else}
+  <div class="fixed top-4 left-4 z-10">
+    <button 
+      class="px-3 py-1 bg-green-500 text-white rounded-full"
+      on:click={() => $clerk?.openSignIn()}
+    >
+      Sign In
+    </button>
+  </div>
+{/if}
