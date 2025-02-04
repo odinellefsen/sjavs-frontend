@@ -212,7 +212,7 @@
   <div class="fixed top-4 left-4 z-10">
     <button 
       class="px-3 py-1 bg-red-500 text-white rounded-full"
-      on:click={() => $user?.signOut()}
+      on:click={() => $clerk?.signOut()}
     >
       Sign Out
     </button>

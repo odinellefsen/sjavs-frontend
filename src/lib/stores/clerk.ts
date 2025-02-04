@@ -7,7 +7,6 @@ const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 interface ClerkUser {
 	id: string;
 	sessionId: string;
-	signOut: () => Promise<void>;
 }
 
 export const clerk = writable<Clerk | null>(null);
