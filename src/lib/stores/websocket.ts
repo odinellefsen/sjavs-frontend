@@ -7,6 +7,8 @@ export interface WSMessage {
 	data: unknown;
 }
 
+const WS_URL = "ws://127.0.0.1:3000/ws";
+
 function createWebSocketStore() {
 	const { subscribe, set, update } = writable<{
 		connected: boolean;
@@ -27,7 +29,7 @@ function createWebSocketStore() {
 
 		try {
 			const token = await currentUser.session.getToken();
-			ws = new WebSocket(`ws://localhost:3000/ws?token=${token}`);
+			ws = new WebSocket(`${WS_URL}?token=${token}`);
 
 			// Or if you prefer using headers (some WebSocket servers support this)
 			// ws = new WebSocket("ws://localhost:3000/ws", {
@@ -60,7 +62,12 @@ function createWebSocketStore() {
 			};
 
 			ws.onerror = (error) => {
-				console.error("WebSocket error:", error);
+				console.error("WebSocket error details:", {
+					readyState: ws.readyState,
+					url: ws.url,
+					protocol: ws.protocol,
+					error,
+				});
 			};
 		} catch (error) {
 			console.error("Failed to get authentication token:", error);
