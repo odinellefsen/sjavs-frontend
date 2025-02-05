@@ -59,7 +59,7 @@
   </svelte:head>
   
   <!-- 
-    TailwindCSS-based responsive (mobile-first) poker table.
+    TailwindCSS-based responsive (mobile-first) sjavs table.
     On small screens, the table is narrower, 
     and it scales up for larger screens.
   -->
@@ -75,7 +75,7 @@
     before:opacity-90
   ">
     <main class="fixed inset-0 flex items-center justify-center p-0 m-0">
-      <!-- A responsive poker table container. 
+      <!-- A responsive sjavs table container. 
            On the smallest screens, it's sized for mobile and 
            expands on larger breakpoints. -->
       <section
