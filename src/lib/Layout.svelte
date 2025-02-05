@@ -1,6 +1,17 @@
 <script lang="ts">
-  import Router from 'svelte-spa-router'
-  import { routes } from './routes'
+  import { Route } from "svelte-routing";
+  import Home from "../App.svelte";
+  import Match from "./pages/Match.svelte";
 </script>
 
-<Router {routes} />
+<main>
+  <Route path="/" component={Home} />
+  <Route path="/match" component={Match} />
+</main>
+
+<style>
+  main {
+    height: 100%;
+    width: 100%;
+  }
+</style>

@@ -1,12 +1,14 @@
-import { mount } from "svelte";
 import "./app.css";
-import Layout from "./lib/Layout.svelte";
+import Root from "./Root.svelte";
 
 const target = document.getElementById("app");
 if (!target) throw new Error("Missing #app element");
 
-const app = mount(Layout, {
+const app = new Root({
 	target,
+	props: {
+		url: window.location.pathname,
+	},
 });
 
 export default app;
