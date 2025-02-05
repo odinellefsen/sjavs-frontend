@@ -206,25 +206,3 @@
       Send Test Message
     </button>
   </div>
-  
-  <!-- Add sign-in/sign-out buttons based on auth state -->
-  {#if $user}
-    <div class="fixed top-4 left-4 z-10">
-      <button 
-        class="px-3 py-1 bg-red-500 text-white rounded-full"
-        on:click={() => $clerk?.signOut()}
-      >
-        Sign Out
-      </button>
-    </div>
-  {:else}
-    <div class="fixed top-4 left-4 z-10">
-      <button 
-        class="px-3 py-1 bg-green-500 text-white rounded-full"
-        on:click={() => $clerk?.openSignIn()}
-      >
-        Sign In
-      </button>
-    </div>
-  {/if}
-  
