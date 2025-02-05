@@ -21,6 +21,7 @@
     "vite": "^6.0.5"
   },
   "dependencies": {
-    "@clerk/clerk-js": "^5.52.0"
+    "@clerk/clerk-js": "^5.52.0",
+    "svelte-spa-router": "^4.0.1"
   }
 }
