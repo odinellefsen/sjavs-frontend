@@ -7,6 +7,9 @@ const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 interface ClerkUser {
 	id: string;
 	sessionId: string;
+	session?: {
+		getToken(options?: { template?: string }): Promise<string | null>;
+	};
 }
 
 export const clerk = writable<Clerk | null>(null);
@@ -18,11 +21,30 @@ export async function initClerk() {
 
 	clerk.set(clerkInstance);
 
-	// Set initial user with type assertion
-	user.set(clerkInstance.user as ClerkUser | null);
+	// Set initial user with type assertion and include session
+	const currentUser = clerkInstance.user;
+	const session = clerkInstance.session;
+
+	user.set(
+		currentUser
+			? {
+					id: currentUser.id,
+					sessionId: session?.id || "",
+					session: session || undefined,
+				}
+			: null,
+	);
 
 	// Update user store when auth state changes
 	clerkInstance.addListener((state) => {
-		user.set(state.user as ClerkUser | null);
+		user.set(
+			state.user
+				? {
+						id: state.user.id,
+						sessionId: state.session?.id || "",
+						session: state.session || undefined,
+					}
+				: null,
+		);
 	});
 }

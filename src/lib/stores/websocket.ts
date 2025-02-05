@@ -18,31 +18,56 @@ function createWebSocketStore() {
 
 	let ws: WebSocket;
 
-	function connect(retries = 5) {
-		ws = new WebSocket("ws://localhost:3000/ws");
+	async function connect(retries = 5) {
+		const currentUser = get(user);
+		if (!currentUser?.session) {
+			console.error("Must be signed in to connect");
+			return;
+		}
 
-		ws.onopen = () => {
-			update((state) => ({ ...state, connected: true }));
-			console.log("Connected to WebSocket");
-		};
+		try {
+			const token = await currentUser.session.getToken();
+			ws = new WebSocket(`ws://localhost:3000/ws?token=${token}`);
 
-		ws.onclose = () => {
-			update((state) => ({ ...state, connected: false }));
-			console.log("Disconnected from WebSocket");
+			// Or if you prefer using headers (some WebSocket servers support this)
+			// ws = new WebSocket("ws://localhost:3000/ws", {
+			//   headers: {
+			//     Authorization: `Bearer ${token}`
+			//   }
+			// });
 
-			// Attempt to reconnect with a limit
+			ws.onopen = () => {
+				update((state) => ({ ...state, connected: true }));
+				console.log("Connected to WebSocket");
+			};
+
+			ws.onclose = () => {
+				update((state) => ({ ...state, connected: false }));
+				console.log("Disconnected from WebSocket");
+
+				// Attempt to reconnect with a limit
+				if (retries > 0) {
+					setTimeout(() => connect(retries - 1), 2000);
+				}
+			};
+
+			ws.onmessage = (event) => {
+				const message = JSON.parse(event.data);
+				update((state) => ({
+					...state,
+					messages: [...state.messages, message],
+				}));
+			};
+
+			ws.onerror = (error) => {
+				console.error("WebSocket error:", error);
+			};
+		} catch (error) {
+			console.error("Failed to get authentication token:", error);
 			if (retries > 0) {
 				setTimeout(() => connect(retries - 1), 2000);
 			}
-		};
-
-		ws.onmessage = (event) => {
-			const message = JSON.parse(event.data);
-			update((state) => ({
-				...state,
-				messages: [...state.messages, message],
-			}));
-		};
+		}
 	}
 
 	function sendMessage(event: string, data: unknown = {}) {

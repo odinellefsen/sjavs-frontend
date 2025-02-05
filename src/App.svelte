@@ -24,13 +24,13 @@
 
   onMount(async () => {
     await initClerk();
-    wsStore.connect();
+    await wsStore.connect();
 
     // Wait a bit before sending the join message
     setTimeout(() => {
-        if (connected) {
-            wsStore.sendMessage("join");
-        }
+      if (connected) {
+        wsStore.sendMessage("join");
+      }
     }, 500); // Small delay to ensure the WebSocket is ready
   });
 
