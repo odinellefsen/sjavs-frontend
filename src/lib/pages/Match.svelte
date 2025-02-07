@@ -156,6 +156,13 @@ function sendTestMessage() {
           {/each}
         </div>
 
+        <div class="absolute bottom-4 right-4 bg-black/50 p-4 text-white rounded-lg max-w-md">
+          <h3 class="text-lg font-bold">Messages:</h3>
+          {#each messages as message}
+            <p>{message.event}: {JSON.stringify(message.data)}</p>
+          {/each}
+        </div>
+
   <Link
     class="fixed top-4 left-4 z-10 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-xl font-semibold"
     to="/">Back</Link>
