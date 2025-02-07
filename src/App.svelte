@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Link } from "svelte-routing";
-  import { initClerk, user, clerk } from './lib/stores/clerk';
-  import { onMount } from 'svelte';
+import { Link } from "svelte-routing";
+import { initClerk, user, clerk } from "./lib/stores/clerk";
+import { onMount } from "svelte";
 
-  onMount(async () => {
-    await initClerk();
-  });
+onMount(async () => {
+	await initClerk();
+});
 </script>
 
 <div class="fixed inset-0 bg-[#5c3a1e] flex items-center justify-center">

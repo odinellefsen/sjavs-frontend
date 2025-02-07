@@ -1,50 +1,51 @@
 <script lang="ts">
-    import CardHand from '../CardHand.svelte'
-    import { wsStore, type WSMessage } from '../stores/websocket';
-    import { onMount, onDestroy } from 'svelte';
-    import { initClerk, user, clerk } from '../stores/clerk';
-  
-    // Example seat data, if you'd like to map over seats.
-    // For illustrative purposes:
-    const seats = [
-      { name: 'Player 1', position: 'top-center' },
-      { name: 'Player 2', position: 'left-center' },
-      { name: 'Player 3', position: 'right-center' },
-      { name: 'Player 4', position: 'bottom-center' }
-    ]
-  
-    // Subscribe to WebSocket store
-    let connected = false;
-    let messages: WSMessage[] = [];
-  
-    const unsubscribe = wsStore.subscribe(state => {
-      connected = state.connected;
-      messages = state.messages;
-    });
-  
-    onMount(async () => {
-      await initClerk();
-      await wsStore.connect();
-  
-      // Wait a bit before sending the join message
-      setTimeout(() => {
-        if (connected) {
-          wsStore.sendMessage("join");
-        }
-      }, 500); // Small delay to ensure the WebSocket is ready
-    });
-  
-    onDestroy(() => {
-      // Clean up subscription and connection
-      unsubscribe();
-      wsStore.disconnect();
-    });
-  
-    // Example function to send a message
-    function sendTestMessage() {
-      wsStore.sendMessage('test', { message: 'Hello from client!' });
-    }
-  </script>
+import CardHand from "../CardHand.svelte";
+import { wsStore, type WSMessage } from "../stores/websocket";
+import { onMount, onDestroy } from "svelte";
+import { initClerk } from "../stores/clerk";
+import { Link } from "svelte-routing";
+
+// Example seat data, if you'd like to map over seats.
+// For illustrative purposes:
+const seats = [
+	{ name: "Player 1", position: "top-center" },
+	{ name: "Player 2", position: "left-center" },
+	{ name: "Player 3", position: "right-center" },
+	{ name: "Player 4", position: "bottom-center" },
+];
+
+// Subscribe to WebSocket store
+let connected = false;
+let messages: WSMessage[] = [];
+
+const unsubscribe = wsStore.subscribe((state) => {
+	connected = state.connected;
+	messages = state.messages;
+});
+
+onMount(async () => {
+	await initClerk();
+	await wsStore.connect();
+
+	// Wait a bit before sending the join message
+	setTimeout(() => {
+		if (connected) {
+			wsStore.sendMessage("join");
+		}
+	}, 500); // Small delay to ensure the WebSocket is ready
+});
+
+onDestroy(() => {
+	// Clean up subscription and connection
+	unsubscribe();
+	wsStore.disconnect();
+});
+
+// Example function to send a message
+function sendTestMessage() {
+	wsStore.sendMessage("test", { message: "Hello from client!" });
+}
+</script>
   
   <svelte:head>
     <style>
@@ -193,6 +194,10 @@
       </div>
     </main>
   </div>
+
+  <Link
+    class="fixed top-4 left-4 z-10 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-xl font-semibold"
+    to="/">Back</Link>
   
   <!-- Add a status indicator and test button -->
   <div class="fixed top-4 right-4 z-10 flex gap-2">
@@ -206,3 +211,4 @@
       Send Test Message
     </button>
   </div>
+
