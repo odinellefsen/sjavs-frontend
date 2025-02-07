@@ -2,8 +2,10 @@
 import { Link } from "svelte-routing";
 import { initClerk, user, clerk } from "./lib/stores/clerk";
 import { onMount } from "svelte";
+import { updateThemeColor } from "./lib/utils/theme";
 
 onMount(async () => {
+	updateThemeColor("#5c3a1e");
 	await initClerk();
 });
 </script>
