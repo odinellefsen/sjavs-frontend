@@ -102,23 +102,9 @@ function sendTestMessage() {
                 </div>
               </div>
             {/if}
-            <!-- <!-- {#if seat.position === 'bottom-center'}
-              <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
-                <div
-                  class="
-                    text-white
-                    bg-black/40
-                    py-2
-                    px-4
-                    rounded-md
-                    text-center
-                    shadow-lg
-                  "
-                >
-                  {seat.name}
-                </div>
-              </div> -->
-            <!-- {/if} -->
+            {#if seat.position === 'bottom-center'}
+            <CardHand />
+            {/if}
             {#if seat.position === 'left-center'}
               <div class="absolute left-4 top-1/2 -translate-y-1/2">
                 <div
@@ -156,12 +142,12 @@ function sendTestMessage() {
           {/each}
         </div>
 
-        <div class="absolute bottom-4 right-4 bg-black/50 p-4 text-white rounded-lg max-w-md">
+        <!-- <div class="absolute bottom-4 right-4 bg-black/50 p-4 text-white rounded-lg max-w-md">
           <h3 class="text-lg font-bold">Messages:</h3>
           {#each messages as message}
             <p>{message.event}: {JSON.stringify(message.data)}</p>
           {/each}
-        </div>
+        </div> -->
 
   <Link
     class="fixed top-4 left-4 z-10 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-xl font-semibold"
@@ -179,4 +165,3 @@ function sendTestMessage() {
       Send Test Message
     </button>
   </div>
-
