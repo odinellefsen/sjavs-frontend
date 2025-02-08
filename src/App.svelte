@@ -4,13 +4,45 @@ import { initClerk, user, clerk } from "./lib/stores/clerk";
 import { onMount } from "svelte";
 import { updateThemeColor } from "./lib/utils/theme";
 import PinCode from "./lib/components/PinCode.svelte";
+import { navigate } from "svelte-routing";
 
 let showPinDialog = false;
+let isCreatingMatch = false;
 
 onMount(async () => {
 	updateThemeColor("#5c3a1e");
 	await initClerk();
 });
+
+async function createMatch() {
+	try {
+		isCreatingMatch = true;
+		const response = await fetch("http://192.168.1.171:3000/create-match", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				// Add authorization header if needed
+				// 'Authorization': `Bearer ${await $clerk?.session?.getToken()}`
+			},
+			credentials: "include",
+		});
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+
+		const data = await response.json();
+		// Assuming the backend returns some match data or ID
+		// Navigate to match page with the match ID
+		console.log(data);
+		// navigate("/match");
+	} catch (error) {
+		console.error("Error creating match:", error);
+		// You might want to show an error message to the user
+	} finally {
+		isCreatingMatch = false;
+	}
+}
 
 function handlePinComplete(event: CustomEvent<{ pin: string }>) {
 	console.log("PIN entered:", event.detail.pin);
@@ -23,12 +55,17 @@ function handlePinComplete(event: CustomEvent<{ pin: string }>) {
   <div class="bg-white/10 p-8 rounded-lg backdrop-blur-sm text-center">
     <h1 class="text-4xl font-bold text-white mb-8">Sjavs Lobby</h1>
     
-    <Link 
-      to="/match"
-      class="inline-block px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xl font-semibold mb-4 w-full"
+    <button 
+      class="inline-block px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xl font-semibold mb-4 w-full disabled:opacity-50 disabled:cursor-not-allowed"
+      on:click={createMatch}
+      disabled={isCreatingMatch}
     >
-      Start Match
-    </Link>
+      {#if isCreatingMatch}
+        Creating Match...
+      {:else}
+        Create Match
+      {/if}
+    </button>
 
     <button 
       class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xl font-semibold mb-4 w-full"
