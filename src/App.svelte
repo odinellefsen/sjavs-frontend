@@ -17,24 +17,34 @@ onMount(async () => {
 async function createMatch() {
 	try {
 		isCreatingMatch = true;
-		const response = await fetch("http://192.168.1.171:3000/create-match", {
+
+		// Get the token from Clerk
+		const token = await $clerk?.session?.getToken();
+		if (!token) {
+			throw new Error("No authentication token available");
+		}
+
+		// Add token as a query parameter
+		const url = new URL("http://192.168.1.171:3000/create-match");
+		url.searchParams.append("token", token);
+
+		const response = await fetch(url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				// Add authorization header if needed
-				// 'Authorization': `Bearer ${await $clerk?.session?.getToken()}`
 			},
 			credentials: "include",
 		});
 
 		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
+			const errorData = await response.json();
+			throw new Error(
+				errorData.message || `HTTP error! status: ${response.status}`,
+			);
 		}
 
 		const data = await response.json();
-		// Assuming the backend returns some match data or ID
-		// Navigate to match page with the match ID
-		console.log(data);
+		console.log("Match created:", data);
 		// navigate("/match");
 	} catch (error) {
 		console.error("Error creating match:", error);
