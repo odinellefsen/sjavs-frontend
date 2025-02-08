@@ -158,10 +158,4 @@ function sendTestMessage() {
     <div class={`px-3 py-1 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'} text-white`}>
       {connected ? 'Connected' : 'Disconnected'}
     </div>
-    <button 
-      class="px-3 py-1 bg-blue-500 text-white rounded-full"
-      on:click={sendTestMessage}
-    >
-      Send Test Message
-    </button>
   </div>
