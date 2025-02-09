@@ -25,7 +25,7 @@ async function createMatch() {
 		}
 
 		// Add token as a query parameter
-		const url = new URL("http://192.168.1.171:3000/create-match");
+		const url = new URL("http://192.168.178.88:3000/create-match");
 		url.searchParams.append("token", token);
 
 		const response = await fetch(url, {
