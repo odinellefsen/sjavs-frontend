@@ -8,6 +8,7 @@ import { navigate } from "svelte-routing";
 
 let showPinDialog = false;
 let isCreatingMatch = false;
+let errorMessage = "";
 
 onMount(async () => {
 	updateThemeColor("#5c3a1e");
@@ -17,14 +18,13 @@ onMount(async () => {
 async function createMatch() {
 	try {
 		isCreatingMatch = true;
+		errorMessage = ""; // Clear any previous error
 
-		// Get the token from Clerk
 		const token = await $clerk?.session?.getToken();
 		if (!token) {
 			throw new Error("No authentication token available");
 		}
 
-		// Add token as a query parameter
 		const url = new URL("http://192.168.178.88:3000/create-match");
 		url.searchParams.append("token", token);
 
@@ -36,19 +36,19 @@ async function createMatch() {
 			credentials: "include",
 		});
 
+		const data = await response.json();
+
 		if (!response.ok) {
-			const errorData = await response.json();
 			throw new Error(
-				errorData.message || `HTTP error! status: ${response.status}`,
+				data.error || data.message || `Server error: ${response.status}`,
 			);
 		}
 
-		const data = await response.json();
 		console.log("Match created:", data);
-		// navigate("/match");
+		navigate(`/match/${data.game_id}`);
 	} catch (error) {
 		console.error("Error creating match:", error);
-		// You might want to show an error message to the user
+		errorMessage = error instanceof Error ? error.message : String(error);
 	} finally {
 		isCreatingMatch = false;
 	}
@@ -62,7 +62,7 @@ function handlePinComplete(event: CustomEvent<{ pin: string }>) {
 </script>
 
 <div class="fixed inset-0 bg-[#5c3a1e] flex items-center justify-center">
-  <div class="bg-white/10 p-8 rounded-lg backdrop-blur-sm text-center">
+  <div class="bg-white/10 p-8 rounded-lg backdrop-blur-sm text-center relative">
     <h1 class="text-4xl font-bold text-white mb-8">Sjavs Lobby</h1>
     
     <button 
@@ -76,6 +76,12 @@ function handlePinComplete(event: CustomEvent<{ pin: string }>) {
         Create Match
       {/if}
     </button>
+
+    {#if errorMessage}
+      <div class="absolute -bottom-20 left-0 right-0 mx-auto w-full p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-100">
+        {errorMessage}
+      </div>
+    {/if}
 
     <button 
       class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xl font-semibold mb-4 w-full"
