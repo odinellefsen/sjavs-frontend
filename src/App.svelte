@@ -9,6 +9,7 @@ import { navigate } from "svelte-routing";
 let showPinDialog = false;
 let isCreatingMatch = false;
 let errorMessage = "";
+let isLeavingMatch = false;
 
 onMount(async () => {
 	updateThemeColor("#5c3a1e");
@@ -54,6 +55,44 @@ async function createMatch() {
 	}
 }
 
+async function leaveMatch() {
+	try {
+		isLeavingMatch = true;
+		errorMessage = ""; // Clear any previous error
+
+		const token = await $clerk?.session?.getToken();
+		if (!token) {
+			throw new Error("No authentication token available");
+		}
+
+		const url = new URL("http://192.168.178.88:3000/leave-match");
+		url.searchParams.append("token", token);
+
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+		});
+
+		const data = await response.json();
+
+		if (!response.ok) {
+			throw new Error(
+				data.error || data.message || `Server error: ${response.status}`,
+			);
+		}
+
+		console.log("Left match:", data);
+	} catch (error) {
+		console.error("Error leaving match:", error);
+		errorMessage = error instanceof Error ? error.message : String(error);
+	} finally {
+		isLeavingMatch = false;
+	}
+}
+
 function handlePinComplete(event: CustomEvent<{ pin: string }>) {
 	console.log("PIN entered:", event.detail.pin);
 	// Handle the PIN verification here
@@ -74,6 +113,18 @@ function handlePinComplete(event: CustomEvent<{ pin: string }>) {
         Creating Match...
       {:else}
         Create Match
+      {/if}
+    </button>
+
+    <button 
+      class="inline-block px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-xl font-semibold mb-4 w-full disabled:opacity-50 disabled:cursor-not-allowed"
+      on:click={leaveMatch}
+      disabled={isLeavingMatch}
+    >
+      {#if isLeavingMatch}
+        Leaving Match...
+      {:else}
+        Leave Match
       {/if}
     </button>
 
