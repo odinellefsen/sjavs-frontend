@@ -5,6 +5,7 @@ import { onMount } from "svelte";
 import { updateThemeColor } from "./lib/utils/theme";
 import PinCode from "./lib/components/PinCode.svelte";
 import { navigate } from "svelte-routing";
+import axios from "axios";
 
 let showPinDialog = false;
 let isCreatingMatch = false;
@@ -22,29 +23,16 @@ async function createMatch() {
 		errorMessage = ""; // Clear any previous error
 
 		const token = await $clerk?.session?.getToken();
+
 		if (!token) {
 			throw new Error("No authentication token available");
 		}
 
-		const url = new URL("http://192.168.178.88:3000/create-match");
-		url.searchParams.append("token", token);
+		const response = await axios.post(
+			`http://192.168.1.176:3000/normal-match?token=${token}`,
+		);
 
-		const response = await fetch(url, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-		});
-
-		const data = await response.json();
-
-		if (!response.ok) {
-			throw new Error(
-				data.error || data.message || `Server error: ${response.status}`,
-			);
-		}
-
+		const data = response.data;
 		console.log("Match created:", data);
 		navigate(`/match/${data.game_id}`);
 	} catch (error) {
@@ -65,24 +53,11 @@ async function leaveMatch() {
 			throw new Error("No authentication token available");
 		}
 
-		const url = new URL("http://192.168.178.88:3000/leave-match");
-		url.searchParams.append("token", token);
+		const response = await axios.delete(
+			`http://192.168.1.176:3000/normal-match?token=${token}`,
+		);
 
-		const response = await fetch(url, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-		});
-
-		const data = await response.json();
-
-		if (!response.ok) {
-			throw new Error(
-				data.error || data.message || `Server error: ${response.status}`,
-			);
-		}
+		const data = response.data;
 
 		console.log("Left match:", data);
 	} catch (error) {

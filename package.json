@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@clerk/clerk-js": "^5.52.0",
+    "axios": "^1.7.9",
     "svelte-routing": "^2.13.0"
   }
 }
