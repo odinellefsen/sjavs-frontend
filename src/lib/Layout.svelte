@@ -1,12 +1,12 @@
 <script lang="ts">
 import { Route } from "svelte-routing";
 import Home from "../App.svelte";
-import Match from "./pages/Match.svelte";
+import NormalMatch from "./pages/NormalMatch.svelte";
 </script>
 
 <main>
   <Route path="/" component={Home} />
-  <Route path="/:gameId" component={Match} />
+  <Route path="/:gameId" component={NormalMatch} />
 </main>
 
 <style>
