@@ -1,5 +1,4 @@
 <script lang="ts">
-import { Link } from "svelte-routing";
 import { initClerk, user, clerk } from "./lib/stores/clerk";
 import { onMount } from "svelte";
 import { updateThemeColor } from "./lib/utils/theme";
@@ -34,7 +33,7 @@ async function createMatch() {
 
 		const data = response.data;
 		console.log("Match created:", data);
-		navigate(`/match/${data.game_id}`);
+		navigate(`/${data.game_id}`);
 	} catch (error) {
 		console.error("Error creating match:", error);
 		errorMessage = error instanceof Error ? error.message : String(error);
