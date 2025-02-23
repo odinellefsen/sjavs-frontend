@@ -37,13 +37,6 @@ function createWebSocketStore() {
 			const token = await currentUser.session.getToken();
 			ws = new WebSocket(`${WS_URL}?token=${token}`);
 
-			// Or if you prefer using headers (some WebSocket servers support this)
-			// ws = new WebSocket("ws://localhost:3000/ws", {
-			//   headers: {
-			//     Authorization: `Bearer ${token}`
-			//   }
-			// });
-
 			ws.onopen = () => {
 				update((state) => ({ ...state, connected: true }));
 				console.log("Connected to WebSocket");
@@ -53,7 +46,6 @@ function createWebSocketStore() {
 				update((state) => ({ ...state, connected: false }));
 				console.log("Disconnected from WebSocket");
 
-				// Attempt to reconnect with a limit
 				if (retries > 0) {
 					setTimeout(() => connect(retries - 1), 2000);
 				}
@@ -66,7 +58,6 @@ function createWebSocketStore() {
 					messages: [...state.messages, message],
 				}));
 
-				// Handle joined event
 				if (message.event === "joined") {
 					console.log("Game status:", message.data.status);
 					update((state) => ({
