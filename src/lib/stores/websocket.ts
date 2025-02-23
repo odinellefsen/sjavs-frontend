@@ -4,7 +4,11 @@ import { get } from "svelte/store";
 
 export interface WSMessage {
 	event: string;
-	data: unknown;
+	data: {
+		message?: string;
+		status?: string;
+		[key: string]: unknown;
+	};
 }
 
 const WS_URL = "ws://192.168.1.176:3000/ws";
@@ -13,9 +17,11 @@ function createWebSocketStore() {
 	const { subscribe, set, update } = writable<{
 		connected: boolean;
 		messages: WSMessage[];
+		gameState: "waiting" | "playing" | null;
 	}>({
 		connected: false,
 		messages: [],
+		gameState: null,
 	});
 
 	let ws: WebSocket;
@@ -59,6 +65,15 @@ function createWebSocketStore() {
 					...state,
 					messages: [...state.messages, message],
 				}));
+
+				// Handle joined event
+				if (message.event === "joined") {
+					console.log("Game status:", message.data.status);
+					update((state) => ({
+						...state,
+						gameState: message.data.status as "waiting" | "playing",
+					}));
+				}
 			};
 
 			ws.onerror = (error) => {

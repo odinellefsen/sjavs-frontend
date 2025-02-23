@@ -3,16 +3,14 @@ import GameBoard from "../components/game-board/GameBoard.svelte";
 import { wsStore, type WSMessage } from "../stores/websocket";
 import { onMount, onDestroy } from "svelte";
 import { initClerk } from "../stores/clerk";
+import WaitingRoom from "../components/waiting-room/WaitingRoom.svelte";
 import { updateThemeColor } from "../utils/theme";
 
-// Subscribe to WebSocket store
-let connected = false;
-let messages: WSMessage[] = [];
+// Get gameId from URL parameters
+export let gameId: string;
 
-const unsubscribe = wsStore.subscribe((state) => {
-	connected = state.connected;
-	messages = state.messages;
-});
+// Using auto-subscription syntax for cleaner code
+$: ({ connected, messages, gameState } = $wsStore);
 
 onMount(async () => {
 	updateThemeColor("#166534"); // Using green-800 for a darker, richer felt color
@@ -22,24 +20,26 @@ onMount(async () => {
 	// Wait a bit before sending the join message
 	setTimeout(() => {
 		if (connected) {
-			wsStore.sendMessage("join");
+			wsStore.sendMessage("join", { game_id: gameId });
 		}
 	}, 500); // Small delay to ensure the WebSocket is ready
 });
 
 onDestroy(() => {
 	// Clean up subscription and connection
-	unsubscribe();
 	wsStore.disconnect();
 });
-
-// Example function to send a message
-function sendTestMessage() {
-	wsStore.sendMessage("test", { message: "Hello from client!" });
-}
 </script>
 
-<GameBoard />
+{#if gameState === 'waiting'}
+    <WaitingRoom />
+{:else if gameState === 'playing'}
+    <GameBoard />
+{:else}
+    <div class="flex items-center justify-center h-screen">
+        <div class="text-xl">Loading game state...</div>
+    </div>
+{/if}
 
 <!-- Add a status indicator and test button -->
 <div class="fixed top-4 right-4 z-10 flex gap-2">
@@ -47,3 +47,4 @@ function sendTestMessage() {
       {connected ? 'Connected' : 'Disconnected'}
     </div>
 </div>
+
