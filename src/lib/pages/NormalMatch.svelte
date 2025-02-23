@@ -10,7 +10,7 @@ import { Link } from "svelte-routing";
 export let gameId: string;
 
 // Using auto-subscription syntax for cleaner code
-$: ({ connected, messages, gameState } = $wsStore);
+$: ({ connected, gameState } = $wsStore);
 
 onMount(async () => {
 	updateThemeColor("#166534"); // Using green-800 for a darker, richer felt color
