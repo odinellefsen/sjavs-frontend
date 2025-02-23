@@ -53,7 +53,7 @@ async function leaveMatch() {
 		}
 
 		const response = await axios.delete(
-			`http://192.168.1.176:3000/normal-match?token=${token}`,
+			`http://192.168.1.176:3000/normal-match/leave?token=${token}`,
 		);
 
 		const data = response.data;
@@ -67,10 +67,26 @@ async function leaveMatch() {
 	}
 }
 
-function handlePinComplete(event: CustomEvent<{ pin: string }>) {
-	console.log("PIN entered:", event.detail.pin);
-	// Handle the PIN verification here
-	showPinDialog = false;
+async function handlePinComplete(event: CustomEvent<{ pin: string }>) {
+	try {
+		const token = await $clerk?.session?.getToken();
+		if (!token) {
+			throw new Error("No authentication token available");
+		}
+		const response = await axios.post(
+			`http://192.168.1.176:3000/normal-match/join?token=${token}`,
+			{ pin_code: event.detail.pin },
+		);
+		const data = response.data;
+		console.log("join match response", data);
+		if (data.success) {
+			navigate(`/${data.game_id}`);
+		}
+		showPinDialog = false;
+	} catch (error) {
+		console.error("Error joining match:", error);
+		errorMessage = error instanceof Error ? error.message : String(error);
+	}
 }
 </script>
 
