@@ -111,8 +111,5 @@ const seats = [
                 <p>{message.event}: {JSON.stringify(message.data)}</p>
               {/each}
             </div> -->
-    
-      <Link
-        class="fixed top-4 left-4 z-10 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-xl font-semibold"
-        to="/">Back</Link>
+
     
