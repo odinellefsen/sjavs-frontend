@@ -1,6 +1,6 @@
 <script lang="ts">
 import { initClerk, user, clerk } from "./lib/stores/clerk";
-import { onMount } from "svelte";
+import { onMount, onDestroy } from "svelte";
 import { updateThemeColor } from "./lib/utils/theme";
 import PinCode from "./lib/components/PinCode.svelte";
 import { navigate } from "svelte-routing";
@@ -10,6 +10,7 @@ let showPinDialog = false;
 let isCreatingMatch = false;
 let errorMessage = "";
 let isLeavingMatch = false;
+let currentRequest: AbortController | null = null;
 
 onMount(async () => {
 	updateThemeColor("#5c3a1e");
@@ -17,35 +18,54 @@ onMount(async () => {
 });
 
 async function createMatch() {
+	if (currentRequest) {
+		currentRequest.abort();
+	}
+	currentRequest = new AbortController();
+
 	try {
 		isCreatingMatch = true;
-		errorMessage = ""; // Clear any previous error
+		errorMessage = "";
 
 		const token = await $clerk?.session?.getToken();
-
 		if (!token) {
 			throw new Error("No authentication token available");
 		}
 
 		const response = await axios.post(
 			`http://192.168.1.176:3000/normal-match?token=${token}`,
+			{},
+			{
+				signal: currentRequest.signal,
+				timeout: 5000,
+			},
 		);
 
 		const data = response.data;
 		console.log("Match created:", data);
 		navigate(`/${data.game_id}`);
 	} catch (error) {
+		if (axios.isCancel(error)) {
+			console.log("Request cancelled");
+			return;
+		}
 		console.error("Error creating match:", error);
 		errorMessage = error instanceof Error ? error.message : String(error);
 	} finally {
 		isCreatingMatch = false;
+		currentRequest = null;
 	}
 }
 
 async function leaveMatch() {
+	if (currentRequest) {
+		currentRequest.abort();
+	}
+	currentRequest = new AbortController();
+
 	try {
 		isLeavingMatch = true;
-		errorMessage = ""; // Clear any previous error
+		errorMessage = "";
 
 		const token = await $clerk?.session?.getToken();
 		if (!token) {
@@ -54,20 +74,33 @@ async function leaveMatch() {
 
 		const response = await axios.delete(
 			`http://192.168.1.176:3000/normal-match/leave?token=${token}`,
+			{
+				signal: currentRequest.signal,
+				timeout: 5000,
+			},
 		);
 
 		const data = response.data;
-
 		console.log("Left match:", data);
 	} catch (error) {
+		if (axios.isCancel(error)) {
+			console.log("Request cancelled");
+			return;
+		}
 		console.error("Error leaving match:", error);
 		errorMessage = error instanceof Error ? error.message : String(error);
 	} finally {
 		isLeavingMatch = false;
+		currentRequest = null;
 	}
 }
 
 async function handlePinComplete(event: CustomEvent<{ pin: string }>) {
+	if (currentRequest) {
+		currentRequest.abort();
+	}
+	currentRequest = new AbortController();
+
 	try {
 		const token = await $clerk?.session?.getToken();
 		if (!token) {
@@ -76,18 +109,35 @@ async function handlePinComplete(event: CustomEvent<{ pin: string }>) {
 		const response = await axios.post(
 			`http://192.168.1.176:3000/normal-match/join?token=${token}`,
 			{ pin_code: event.detail.pin },
+			{
+				signal: currentRequest.signal,
+				timeout: 5000,
+			},
 		);
 		const data = response.data;
 		console.log("join match response", data);
-		if (data.success) {
+
+		if (data.game_id) {
 			navigate(`/${data.game_id}`);
 		}
 		showPinDialog = false;
 	} catch (error) {
+		if (axios.isCancel(error)) {
+			console.log("Request cancelled");
+			return;
+		}
 		console.error("Error joining match:", error);
 		errorMessage = error instanceof Error ? error.message : String(error);
+	} finally {
+		currentRequest = null;
 	}
 }
+
+onDestroy(() => {
+	if (currentRequest) {
+		currentRequest.abort();
+	}
+});
 </script>
 
 <div class="fixed inset-0 bg-[#5c3a1e] flex items-center justify-center">
@@ -163,3 +213,4 @@ async function handlePinComplete(event: CustomEvent<{ pin: string }>) {
     </div>
   </div>
 {/if}
+
