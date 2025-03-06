@@ -6,8 +6,6 @@ import { initClerk } from "../stores/clerk";
 import WaitingRoom from "../components/waiting-room/WaitingRoom.svelte";
 import { updateThemeColor } from "../utils/theme";
 import { Link } from "svelte-routing";
-// Get gameId from URL parameters
-export let gameId: string;
 
 // Using auto-subscription syntax for cleaner code
 $: ({ connected, gameState } = $wsStore);
@@ -16,17 +14,9 @@ onMount(async () => {
 	updateThemeColor("#166534"); // Using green-800 for a darker, richer felt color
 	await initClerk();
 	await wsStore.connect();
-
-	// Wait a bit before sending the join message
-	setTimeout(() => {
-		if (connected) {
-			wsStore.sendMessage("join", { game_id: gameId });
-		}
-	}, 500); // Small delay to ensure the WebSocket is ready
 });
 
 onDestroy(() => {
-	// Clean up subscription and connection
 	wsStore.disconnect();
 });
 </script>
