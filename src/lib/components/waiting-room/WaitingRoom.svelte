@@ -1,12 +1,22 @@
 <script lang="ts">
+import { initClerk } from "../../stores/clerk";
 import { wsStore } from "../../stores/websocket";
+import { onMount } from "svelte";
 
 // Subscribe to websocket store
 $: ({ connected } = $wsStore);
 
-function handleFindMatch() {
-	wsStore.sendMessage("find_match");
-}
+onMount(async () => {
+	await initClerk();
+	await wsStore.connect();
+	const gameId = new URLSearchParams(window.location.search).get("gameId");
+
+	setTimeout(() => {
+		if (connected) {
+			wsStore.sendMessage("join", { game_id: gameId });
+		}
+	}, 500); // Small delay to ensure the WebSocket is ready
+});
 </script>
 
 <div class="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
@@ -33,15 +43,5 @@ function handleFindMatch() {
                 Reconnect
             </button>
         </div>
-    {/if}
-
-    {#if !connected}
-        <button 
-            class="px-6 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 transition-colors"
-            on:click={handleFindMatch}
-            disabled={!connected}
-        >
-            Find Match
-        </button>
     {/if}
 </div>
