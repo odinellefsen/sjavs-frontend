@@ -31,6 +31,7 @@ onDestroy(() => {
     </div>
 {/if}
 
+<!-- random comment -->
 <!-- Add a status indicator and test button -->
 <div class="fixed top-4 right-4 z-10 flex gap-2">
     <div class={`px-3 py-1 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'} text-white`}>
