@@ -5,10 +5,21 @@ import { onMount, onDestroy } from "svelte";
 import { initClerk } from "../stores/clerk";
 import WaitingRoom from "../components/waiting-room/WaitingRoom.svelte";
 import { updateThemeColor } from "../utils/theme";
-import { Link } from "svelte-routing";
+import { Link, navigate } from "svelte-routing";
 
 // Using auto-subscription syntax for cleaner code
 $: ({ connected, gameState } = $wsStore);
+
+// Watch for game_terminated events
+$: {
+	const terminatedEvent = $wsStore.messages.find(
+		(msg) => msg.event === "game_terminated",
+	);
+	if (terminatedEvent) {
+		console.log("Game terminated:", terminatedEvent.data.message);
+		navigate("/");
+	}
+}
 
 onMount(async () => {
 	updateThemeColor("#166534"); // Using green-800 for a darker, richer felt color

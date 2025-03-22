@@ -53,6 +53,7 @@ function createWebSocketStore() {
 
 			ws.onmessage = (event) => {
 				const message = JSON.parse(event.data);
+				console.log("Received message:", message);
 				update((state) => ({
 					...state,
 					messages: [...state.messages, message],
