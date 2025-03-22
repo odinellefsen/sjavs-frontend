@@ -11,7 +11,7 @@ export interface WSMessage {
 	};
 }
 
-const WS_URL = "ws://192.168.1.176:3000/ws";
+const WS_URL = "ws://192.168.1.185:3000/ws";
 
 function createWebSocketStore() {
 	const { subscribe, set, update } = writable<{
