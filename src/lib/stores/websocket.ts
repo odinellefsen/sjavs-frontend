@@ -52,15 +52,14 @@ function createWebSocketStore() {
 			};
 
 			ws.onmessage = (event) => {
+				console.log("Received message:", event.data);
 				const message = JSON.parse(event.data);
-				console.log("Received message:", message);
 				update((state) => ({
 					...state,
 					messages: [...state.messages, message],
 				}));
 
 				if (message.event === "joined") {
-					console.log("Game status:", message.data.status);
 					update((state) => ({
 						...state,
 						gameState: message.data.status as "waiting" | "playing",
