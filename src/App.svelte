@@ -9,7 +9,6 @@ import axios from "axios";
 let showPinDialog = false;
 let isCreatingMatch = false;
 let errorMessage = "";
-let isLeavingMatch = false;
 let currentRequest: AbortController | null = null;
 
 onMount(async () => {
@@ -53,44 +52,6 @@ async function createMatch() {
 		errorMessage = error instanceof Error ? error.message : String(error);
 	} finally {
 		isCreatingMatch = false;
-		currentRequest = null;
-	}
-}
-
-async function leaveMatch() {
-	if (currentRequest) {
-		currentRequest.abort();
-	}
-	currentRequest = new AbortController();
-
-	try {
-		isLeavingMatch = true;
-		errorMessage = "";
-
-		const token = await $clerk?.session?.getToken();
-		if (!token) {
-			throw new Error("No authentication token available");
-		}
-
-		const response = await axios.delete(
-			`http://192.168.1.185:3000/normal-match/leave?token=${token}`,
-			{
-				signal: currentRequest.signal,
-				timeout: 5000,
-			},
-		);
-
-		const data = response.data;
-		console.log("Left match:", data);
-	} catch (error) {
-		if (axios.isCancel(error)) {
-			console.log("Request cancelled");
-			return;
-		}
-		console.error("Error leaving match:", error);
-		errorMessage = error instanceof Error ? error.message : String(error);
-	} finally {
-		isLeavingMatch = false;
 		currentRequest = null;
 	}
 }
@@ -153,18 +114,6 @@ onDestroy(() => {
         Creating Match...
       {:else}
         Create Match
-      {/if}
-    </button>
-
-    <button 
-      class="inline-block px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-xl font-semibold mb-4 w-full disabled:opacity-50 disabled:cursor-not-allowed"
-      on:click={leaveMatch}
-      disabled={isLeavingMatch}
-    >
-      {#if isLeavingMatch}
-        Leaving Match...
-      {:else}
-        Leave Match
       {/if}
     </button>
 
