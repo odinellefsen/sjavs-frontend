@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { user } from "./clerk";
+import { user, clerk } from "./clerk";
 import { get } from "svelte/store";
 
 export interface WSMessage {
@@ -11,6 +11,11 @@ export interface WSMessage {
 	};
 }
 
+export interface Player {
+	id: string;
+	username: string;
+}
+
 const WS_URL = "ws://192.168.1.185:3000/ws";
 
 function createWebSocketStore() {
@@ -18,10 +23,12 @@ function createWebSocketStore() {
 		connected: boolean;
 		messages: WSMessage[];
 		gameState: "waiting" | "playing" | null;
+		players: Player[];
 	}>({
 		connected: false,
 		messages: [],
 		gameState: null,
+		players: [],
 	});
 
 	let ws: WebSocket;
@@ -43,7 +50,11 @@ function createWebSocketStore() {
 			};
 
 			ws.onclose = () => {
-				update((state) => ({ ...state, connected: false }));
+				update((state) => ({
+					...state,
+					connected: false,
+					players: [], // Clear players list on disconnect
+				}));
 				console.log("Disconnected from WebSocket");
 
 				if (retries > 0) {
@@ -60,10 +71,74 @@ function createWebSocketStore() {
 				}));
 
 				if (message.event === "joined") {
-					update((state) => ({
-						...state,
-						gameState: message.data.status as "waiting" | "playing",
-					}));
+					const clerkInstance = get(clerk);
+					const userId = get(user)?.id || "";
+
+					// Get the firstname or email from clerk if available
+					let username = "Player";
+					if (clerkInstance?.user) {
+						username = clerkInstance.user.firstName || username;
+
+						// Try to get email if firstName is not available
+						if (!username && clerkInstance.user.emailAddresses?.length > 0) {
+							const email = clerkInstance.user.emailAddresses[0].emailAddress;
+							if (email) username = email;
+						}
+					}
+
+					update((state) => {
+						// Add the current user to the players list
+						const currentPlayer = {
+							id: userId,
+							username: username,
+						};
+
+						// Check if the current player is already in the list
+						const playerExists = state.players.some(
+							(p) => p.id === currentPlayer.id,
+						);
+
+						return {
+							...state,
+							gameState: message.data.status as "waiting" | "playing",
+							players: playerExists
+								? state.players
+								: [...state.players, currentPlayer],
+						};
+					});
+				}
+
+				if (message.event === "player_joined") {
+					update((state) => {
+						const newPlayer = {
+							id: message.data.player_id,
+							username: message.data.username,
+						};
+
+						// Check if player already exists to avoid duplicates
+						const playerExists = state.players.some(
+							(p) => p.id === newPlayer.id,
+						);
+
+						return {
+							...state,
+							players: playerExists
+								? state.players
+								: [...state.players, newPlayer],
+						};
+					});
+				}
+
+				if (message.event === "player_left") {
+					update((state) => {
+						// Remove the player from the list
+						return {
+							...state,
+							players: state.players.filter(
+								(p) => p.id !== message.data.player_id,
+							),
+						};
+					});
 				}
 			};
 

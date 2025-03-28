@@ -15,6 +15,9 @@ $: ({ connected, gameState } = $wsStore);
 let isLeavingMatch = false;
 let errorMessage = "";
 let currentRequest: AbortController | null = null;
+let playerMessage = "";
+let showPlayerMessage = false;
+let playerMessageType: "joined" | "left" = "joined";
 
 // Watch for game_terminated events
 $: {
@@ -24,6 +27,40 @@ $: {
 	if (terminatedEvent) {
 		console.log("Game terminated:", terminatedEvent.data.message);
 		navigate("/");
+	}
+}
+
+// Watch for player_joined events
+$: {
+	const playerJoinedEvent = $wsStore.messages.find(
+		(msg) => msg.event === "player_joined",
+	);
+	if (playerJoinedEvent?.data?.message) {
+		playerMessage = playerJoinedEvent.data.message;
+		playerMessageType = "joined";
+		showPlayerMessage = true;
+
+		// Hide the message after 3 seconds
+		setTimeout(() => {
+			showPlayerMessage = false;
+		}, 3000);
+	}
+}
+
+// Watch for player_left events
+$: {
+	const playerLeftEvent = $wsStore.messages.find(
+		(msg) => msg.event === "player_left",
+	);
+	if (playerLeftEvent?.data?.message) {
+		playerMessage = playerLeftEvent.data.message;
+		playerMessageType = "left";
+		showPlayerMessage = true;
+
+		// Hide the message after 3 seconds
+		setTimeout(() => {
+			showPlayerMessage = false;
+		}, 3000);
 	}
 }
 
@@ -110,6 +147,15 @@ async function leaveMatch() {
 {#if errorMessage}
     <div class="fixed bottom-4 right-4 z-10 bg-red-500/20 border border-red-500 rounded-lg text-red-100 p-4 max-w-xs">
         {errorMessage}
+    </div>
+{/if}
+
+<!-- Display player joined/left notification -->
+{#if showPlayerMessage}
+    <div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-20 
+        {playerMessageType === 'joined' ? 'bg-green-500/20 border-green-500' : 'bg-yellow-500/20 border-yellow-500'} 
+        border rounded-lg text-white p-4 max-w-xs animate-fade-in-out">
+        {playerMessage}
     </div>
 {/if}
 
