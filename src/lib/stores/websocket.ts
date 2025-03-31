@@ -70,45 +70,29 @@ function createWebSocketStore() {
 					messages: [...state.messages, message],
 				}));
 
-				if (message.event === "joined") {
-					const clerkInstance = get(clerk);
-					const userId = get(user)?.id || "";
+				// Handle the correct events
+				if (message.event === "subscribed") {
+					// This replaces your "joined" handler
+					update((state) => ({
+						...state,
+						gameState: message.data.status as "waiting" | "playing",
+					}));
+				}
 
-					// Get the firstname or email from clerk if available
-					let username = "Player";
-					if (clerkInstance?.user) {
-						username = clerkInstance.user.firstName || username;
-
-						// Try to get email if firstName is not available
-						if (!username && clerkInstance.user.emailAddresses?.length > 0) {
-							const email = clerkInstance.user.emailAddresses[0].emailAddress;
-							if (email) username = email;
-						}
-					}
-
-					update((state) => {
-						// Add the current user to the players list
-						const currentPlayer = {
-							id: userId,
-							username: username,
-						};
-
-						// Check if the current player is already in the list
-						const playerExists = state.players.some(
-							(p) => p.id === currentPlayer.id,
-						);
-
-						return {
-							...state,
-							gameState: message.data.status as "waiting" | "playing",
-							players: playerExists
-								? state.players
-								: [...state.players, currentPlayer],
-						};
-					});
+				if (message.event === "player_list") {
+					// This gets the initial list of players
+					update((state) => ({
+						...state,
+						players: message.data.players,
+					}));
 				}
 
 				if (message.event === "player_joined") {
+					// Keep your existing handler
+				}
+
+				if (message.event === "player_connected") {
+					// Similar to player_joined but for when a player connects via WebSocket
 					update((state) => {
 						const newPlayer = {
 							id: message.data.player_id,
