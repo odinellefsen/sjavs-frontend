@@ -16,7 +16,7 @@ export interface Player {
 	username: string;
 }
 
-const WS_URL = "ws://192.168.1.185:3000/ws";
+const WS_URL = "ws://192.168.1.187:3000/ws";
 
 function createWebSocketStore() {
 	const { subscribe, set, update } = writable<{

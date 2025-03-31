@@ -32,7 +32,7 @@ async function createMatch() {
 		}
 
 		const response = await axios.post(
-			`http://192.168.1.185:3000/normal-match?token=${token}`,
+			`http://192.168.1.187:3000/normal-match?token=${token}`,
 			{},
 			{
 				signal: currentRequest.signal,
@@ -68,7 +68,7 @@ async function handlePinComplete(event: CustomEvent<{ pin: string }>) {
 			throw new Error("No authentication token available");
 		}
 		const response = await axios.post(
-			`http://192.168.1.185:3000/normal-match/join?token=${token}`,
+			`http://192.168.1.187:3000/normal-match/join?token=${token}`,
 			{ pin_code: event.detail.pin },
 			{
 				signal: currentRequest.signal,
