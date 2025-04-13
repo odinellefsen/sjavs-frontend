@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { user, clerk } from "./clerk";
+import { user } from "./clerk";
 import { get } from "svelte/store";
 
 export interface WSMessage {
