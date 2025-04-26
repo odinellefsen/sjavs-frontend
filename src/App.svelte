@@ -16,6 +16,17 @@ onMount(async () => {
 	await initClerk();
 });
 
+async function flushRedis() {
+	const token = await $clerk?.session?.getToken();
+	if (!token) {
+		throw new Error("No authentication token available");
+	}
+	const response = await axios.post(
+		`http://192.168.1.187:3000/debug/flush?token=${token}`,
+	);
+	console.log("Redis flushed:", response.data);
+}
+
 async function createMatch() {
 	if (currentRequest) {
 		currentRequest.abort();
@@ -104,6 +115,13 @@ onDestroy(() => {
 <div class="fixed inset-0 bg-[#5c3a1e] flex items-center justify-center">
   <div class="bg-white/10 p-8 rounded-lg backdrop-blur-sm text-center relative">
     <h1 class="text-4xl font-bold text-white mb-8">Sjavs Lobby</h1>
+	
+	<button
+		class="inline-block px-6 py-3 bg-black/60 hover:bg-black/70 text-white rounded-lg text-xl font-semibold mb-4 w-full disabled:opacity-50 disabled:cursor-not-allowed"
+		on:click={flushRedis}
+	>
+		Flush Redis
+	</button>
     
     <button 
       class="inline-block px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xl font-semibold mb-4 w-full disabled:opacity-50 disabled:cursor-not-allowed"
