@@ -6,7 +6,7 @@ import axios from "axios";
 import { navigate } from "svelte-routing";
 
 // Subscribe to websocket store
-$: ({ connected, players } = $wsStore);
+$: ({ connected, players, gameData } = $wsStore);
 
 let isLeavingMatch = false;
 let errorMessage = "";
@@ -66,6 +66,16 @@ async function leaveMatch() {
 
 <div class="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
     <h1 class="text-3xl font-bold">Waiting Room</h1>
+
+    {#if gameData && gameData.id}
+    <div class="bg-blue-800/30 border border-blue-800 rounded-lg p-4 w-full max-w-md mt-4">
+      <h2 class="text-xl font-semibold mb-2">Game Info</h2>
+      <p>Game ID: {gameData.id}</p>
+      <p>Game PIN: {gameData.pin}</p>
+      <p>Status: {gameData.status}</p>
+      <!-- Add more game state properties as needed -->
+    </div>
+  {/if}
     
     {#if connected}
         <div class="flex flex-col items-center gap-4 w-full max-w-md">
