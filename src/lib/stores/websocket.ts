@@ -24,11 +24,22 @@ function createWebSocketStore() {
 		messages: WSMessage[];
 		gameState: "waiting" | "playing" | null;
 		players: Player[];
+		gameData: {
+			// Add this new property to store full game state
+			id?: string;
+			pin?: string;
+			status?: string;
+			number_of_crosses?: number;
+			current_cross?: number;
+			created_timestamp?: string;
+			host?: string;
+		};
 	}>({
 		connected: false,
 		messages: [],
 		gameState: null,
 		players: [],
+		gameData: {}, // Initialize empty game data
 	});
 
 	let ws: WebSocket;
@@ -89,6 +100,17 @@ function createWebSocketStore() {
 
 				if (message.event === "player_joined") {
 					// Keep your existing handler
+				}
+
+				if (message.event === "game_state") {
+					update((state) => ({
+						...state,
+						gameData: message.data.state || {},
+						gameState: message.data.state?.status as
+							| "waiting"
+							| "playing"
+							| null,
+					}));
 				}
 
 				if (message.event === "player_connected") {
