@@ -136,21 +136,6 @@ async function leaveMatch() {
     </div>
 {/if}
 
-<!-- Add Leave Match button -->
-<div class="fixed bottom-4 left-4 z-10">
-    <button 
-        class="px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-        on:click={leaveMatch}
-        disabled={isLeavingMatch}
-    >
-        {#if isLeavingMatch}
-            Leaving Match...
-        {:else}
-            Leave Match
-        {/if}
-    </button>
-</div>
-
 <!-- Add error message if needed -->
 {#if errorMessage}
     <div class="fixed bottom-4 right-4 z-10 bg-red-500/20 border border-red-500 rounded-lg text-red-100 p-4 max-w-xs">
