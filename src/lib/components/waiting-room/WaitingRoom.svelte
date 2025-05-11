@@ -12,18 +12,6 @@ let isLeavingMatch = false;
 let errorMessage = "";
 let currentRequest: AbortController | null = null;
 
-onMount(async () => {
-	await initClerk();
-	await wsStore.connect();
-	const gameId = window.location.pathname.split("/")[1]; // Extract gameId from URL
-
-	setTimeout(() => {
-		if (connected) {
-			wsStore.sendMessage("join", { game_id: gameId });
-		}
-	}, 500); // Small delay to ensure the WebSocket is ready
-});
-
 async function leaveMatch() {
 	if (currentRequest) {
 		currentRequest.abort();
