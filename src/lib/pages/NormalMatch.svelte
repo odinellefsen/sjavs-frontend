@@ -68,6 +68,14 @@ onMount(async () => {
 	updateThemeColor("#166534"); // Using green-800 for a darker, richer felt color
 	await initClerk();
 	await wsStore.connect();
+
+	const gameId = window.location.pathname.split("/")[1]; // Extract gameId from URL
+
+	setTimeout(() => {
+		if (connected) {
+			wsStore.sendMessage("join", { game_id: gameId });
+		}
+	}, 500); // Small delay to ensure the WebSocket is ready
 });
 
 onDestroy(() => {
