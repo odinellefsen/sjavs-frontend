@@ -37,7 +37,6 @@ export async function initClerk() {
 			: null,
 	);
 
-	// Update user store when auth state changes
 	clerkInstance.addListener((state) => {
 		user.set(
 			state.user
