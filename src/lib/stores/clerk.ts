@@ -10,6 +10,7 @@ interface ClerkUser {
 	session?: {
 		getToken(options?: { template?: string }): Promise<string | null>;
 	};
+	username?: string;
 }
 
 export const clerk = writable<Clerk | null>(null);
@@ -31,6 +32,7 @@ export async function initClerk() {
 					id: currentUser.id,
 					sessionId: session?.id || "",
 					session: session || undefined,
+					username: currentUser.username || "",
 				}
 			: null,
 	);
@@ -43,6 +45,7 @@ export async function initClerk() {
 						id: state.user.id,
 						sessionId: state.session?.id || "",
 						session: state.session || undefined,
+						username: state.user.username || "",
 					}
 				: null,
 		);

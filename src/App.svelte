@@ -31,6 +31,7 @@ async function createMatch() {
 	if (currentRequest) {
 		currentRequest.abort();
 	}
+
 	currentRequest = new AbortController();
 
 	try {
@@ -42,9 +43,15 @@ async function createMatch() {
 			throw new Error("No authentication token available");
 		}
 
+		const user_id = $user?.id;
+		const user_name = $user?.username;
+
+		console.log("user_id", user_id);
+		console.log("user_name", user_name);
+
 		const response = await axios.post(
 			`http://192.168.1.187:3000/normal-match?token=${token}`,
-			{},
+			{ user_id: user_id, user_name: user_name },
 			{
 				signal: currentRequest.signal,
 				timeout: 5000,
