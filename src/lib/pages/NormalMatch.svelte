@@ -102,7 +102,7 @@ async function leaveMatch() {
 		}
 
 		const response = await axios.delete(
-			`http://192.168.1.187:3000/normal-match/leave?token=${token}`,
+			`http://192.168.1.198:3000/normal-match/leave?token=${token}`,
 			{
 				signal: currentRequest.signal,
 				timeout: 5000,

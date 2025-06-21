@@ -22,7 +22,7 @@ async function flushRedis() {
 		throw new Error("No authentication token available");
 	}
 	const response = await axios.post(
-		`http://192.168.1.187:3000/debug/flush?token=${token}`,
+		`http://192.168.1.198:3000/debug/flush?token=${token}`,
 	);
 	console.log("Redis flushed:", response.data);
 }
@@ -50,7 +50,7 @@ async function createMatch() {
 		console.log("user_name", user_name);
 
 		const response = await axios.post(
-			`http://192.168.1.187:3000/normal-match?token=${token}`,
+			`http://192.168.1.198:3000/normal-match?token=${token}`,
 			{ user_id: user_id, user_name: user_name },
 			{
 				signal: currentRequest.signal,
@@ -86,7 +86,7 @@ async function handlePinComplete(event: CustomEvent<{ pin: string }>) {
 			throw new Error("No authentication token available");
 		}
 		const response = await axios.post(
-			`http://192.168.1.187:3000/normal-match/join?token=${token}`,
+			`http://192.168.1.198:3000/normal-match/join?token=${token}`,
 			{ pin_code: event.detail.pin },
 			{
 				signal: currentRequest.signal,
